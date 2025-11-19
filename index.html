@@ -1,361 +1,272 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NEO LINE RACER</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Carrinho Seguidor de Linha - Neon</title>
 
-  <!-- Fontes futuristas -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+/* ------------------ FONTES ------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-  <!-- Ícones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+/* ------------------ ESTILOS GERAIS ------------------ */
+body {
+    margin: 0;
+    font-family: "Orbitron", sans-serif;
+    transition: background 0.4s, color 0.4s;
+}
 
-  <style>
-    :root {
-      --bg:#0a0e17;
-      --card:#111827;
-      --text:#e2e8f0;
-      --accent:#00f5ff;
-      --accent2:#ff2e63;
-      --glow:0 0 20px rgba(0,245,255,0.6);
-      --glow2:0 0 25px rgba(255,46,99,0.6);
-    }
+/* ------------------ TEMAS ------------------ */
+body.dark {
+    background: #05000f;
+    color: #a9a4ff;
+}
 
-    *{ margin:0; padding:0; box-sizing:border-box; }
+body.light {
+    background: #e0ddff;
+    color: #2b007a;
+}
 
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:'Exo 2',sans-serif;
-      background-image:
-        radial-gradient(circle at 20% 80%,rgba(0,245,255,0.08)0%,transparent 50%),
-        radial-gradient(circle at 80% 20%,rgba(255,46,99,0.08)0%,transparent 50%);
-      min-height:100vh;
-    }
+/* GLOW universal */
+.glow {
+    text-shadow: 0 0 10px #7b2cff, 0 0 20px #00c8ff;
+}
 
-    .container{ max-width:1400px; margin:0 auto; padding:2rem 1rem; }
+/* ------------------ HEADER ------------------ */
+header {
+    text-align: center;
+    padding: 40px 20px;
+}
 
-    header{
-      text-align:center;
-      padding:4rem 0 3rem;
-    }
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
 
-    h1{
-      font-family:'Orbitron',monospace;
-      font-size:clamp(3rem,8vw,7rem);
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      text-shadow:var(--glow);
-      animation:pulse 4s infinite;
-    }
+/* ------------------ BOTÃO DE MUDAR TEMA ------------------ */
+#toggleTheme {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: 2px solid #7b2cff;
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    color: inherit;
+    transition: 0.3s;
+}
 
-    .subtitle{ font-size:1.5rem; margin-top:1rem; opacity:0.9; }
+#toggleTheme:hover {
+    box-shadow: 0 0 10px #7b2cff, 0 0 20px #00c8ff;
+    transform: scale(1.05);
+}
 
-    /* TABS */
-    .tabs{
-      display:flex; justify-content:center; flex-wrap:wrap;
-      gap:1rem; margin:3rem 0;
-    }
+/* ------------------ ABAS ------------------ */
+.tabs {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+}
 
-    .tab-btn{
-      padding:1rem 2.5rem;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(0,245,255,0.2);
-      border-radius:50px;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:600;
-      transition:.4s;
-      backdrop-filter:blur(10px);
-      position:relative; overflow:hidden;
-    }
+.tab-buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
 
-    .tab-btn.active{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:#000;
-      transform:scale(1.08);
-      box-shadow:var(--glow2);
-    }
+.tab-buttons button {
+    flex: 1;
+    margin: 5px;
+    padding: 12px;
+    font-size: 15px;
+    border: none;
+    background: #12002b;
+    color: #b49aff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    .content{
-      background:rgba(17,24,39,0.6);
-      padding:3rem;
-      margin:2rem 0;
-      border-radius:2rem;
-      border:1px solid rgba(0,245,255,0.15);
-      box-shadow:var(--glow);
-      display:none;
-      min-height:60vh;
-      position:relative;
-      overflow:hidden;
-      backdrop-filter:blur(15px);
-    }
+body.light .tab-buttons button {
+    background: #c4bbff;
+    color: #2b007a;
+}
 
-    .content.active{ display:block; }
+.tab-buttons button:hover {
+    box-shadow: 0 0 10px #7b2cff, 0 0 20px #00c8ff;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-      gap:2rem;
-      margin-top:2rem;
-    }
+.tab-buttons .active {
+    background: linear-gradient(45deg, #7b2cff, #00c8ff);
+    color: white;
+}
 
-    .card{
-      background:rgba(0,0,0,0.4);
-      padding:2rem;
-      border-radius:1.5rem;
-      border:1px solid rgba(0,245,255,0.2);
-      transition:.4s;
-    }
+/* ------------------ ÁREA DO CONTEÚDO ------------------ */
+.tab-content {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 20px;
+    padding: 25px;
+    border: 2px solid #7b2cff;
+    box-shadow: 0 0 15px #7b2cff55;
+}
 
-    .card:hover{
-      transform:translateY(-15px);
-      box-shadow:var(--glow2);
-      border-color:var(--accent);
-    }
+body.light .tab-content {
+    background: rgba(255,255,255,0.5);
+}
 
-    h3{
-      font-family:'Orbitron',monospace;
-      color:var(--accent);
-      margin-bottom:1rem;
-      font-size:1.6rem;
-    }
+/* ------------------ TÍTULOS DAS ABAS ------------------ */
+h2 {
+    margin-top: 0;
+}
 
-    /* Imagens */
-    .produto img{
-      width:100%; height:200px;
-      object-fit:cover;
-      border-radius:1rem;
-      border:3px solid var(--accent2);
-    }
+/* ------------------ CÓDIGO ------------------ */
+pre {
+    background: #0a0020;
+    padding: 20px;
+    border-radius: 12px;
+    color: #dcdcff;
+    overflow-x: auto;
+}
 
-    .btn-ml{
-      display:block;
-      padding:1rem;
-      margin-top:1rem;
-      background:#fff200;
-      color:#000 !important;
-      font-weight:900;
-      border-radius:1rem;
-      text-align:center;
-      text-decoration:none;
-      transition:.3s;
-    }
-
-    .btn-ml:hover{ transform:scale(1.05); }
-
-    footer{
-      text-align:center;
-      padding:4rem 0;
-      font-size:1.2rem;
-      opacity:0.7;
-    }
-
-    @keyframes pulse{
-      0%,100%{ opacity:1; }
-      50%{ opacity:0.8; }
-    }
-
-    .progress-bar{
-      height:8px; border-radius:10px;
-      background:rgba(255,255,255,0.1);
-      overflow:hidden;
-      margin:1rem auto;
-    }
-
-    .progress-fill{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      transition:.5s;
-    }
-  </style>
+body.light pre {
+    background: #d7ccff;
+    color: #2b007a;
+}
+</style>
 </head>
 
-<body>
+<body class="dark">
 
-<div class="container">
+<button id="toggleTheme">Light Mode</button>
 
-  <header>
-    <h1>NEO LINE RACER</h1>
-    <p class="subtitle">O tutorial definitivo do carrinho seguidor de linha</p>
-  </header>
+<header>
+    <h1 class="glow">Carrinho Seguidor de Linha</h1>
+    <p>Passo a passo completo com design futurista neon</p>
+</header>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <div class="tab-btn active" data-tab="1">1 • MATERIAIS</div>
-    <div class="tab-btn" data-tab="2">2 • MONTAGEM</div>
-    <div class="tab-btn" data-tab="3">3 • CIRCUITO</div>
-    <div class="tab-btn" data-tab="4">4 • CÓDIGO</div>
-    <div class="tab-btn" data-tab="5">5 • TESTE</div>
-    <div class="tab-btn" data-tab="6">6 • COMPRAR</div>
-  </div>
+<div class="tabs">
 
-  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-
-  <!-- ABA 1 -->
-  <div class="content active" id="tab-1">
-    <h2 style="text-align:center;font-size:3rem;color:var(--accent)">Componentes Necessários</h2>
-    <div class="grid">
-      <div class="card"><h3>Arduino Nano</h3><p>Cérebro do robô.</p></div>
-      <div class="card"><h3>Ponte H L298N</h3><p>Controla os motores.</p></div>
-      <div class="card"><h3>2× Motores 6V</h3><p>Com caixa de redução.</p></div>
-      <div class="card"><h3>2× Sensores TCRT5000</h3><p>Detectam a linha.</p></div>
-      <div class="card"><h3>Chassi</h3><p>Corpo do carrinho.</p></div>
-      <div class="card"><h3>Bateria</h3><p>Fonte de energia.</p></div>
+    <!-- BOTÕES DAS ABAS -->
+    <div class="tab-buttons">
+        <button class="active" onclick="openTab('materiais')">Materiais</button>
+        <button onclick="openTab('montagem')">Montagem</button>
+        <button onclick="openTab('circuito')">Circuito</button>
+        <button onclick="openTab('codigo')">Código</button>
+        <button onclick="openTab('teste')">Teste</button>
     </div>
-  </div>
 
-  <!-- ABA 2 -->
-  <div class="content" id="tab-2">
-    <h2 style="text-align:center;font-size:3rem;color:var(--accent)">Montagem do Carrinho</h2>
-    <div class="grid">
-      <div class="card"><h3>1. Fixe os Motores</h3><p>Use parafusos no chassi.</p></div>
-      <div class="card"><h3>2. Adicione a Roda Boba</h3><p>Garante equilíbrio frontal.</p></div>
-      <div class="card"><h3>3. Instale o Arduino</h3><p>Deixe acessível para USB.</p></div>
-      <div class="card"><h3>4. Sensores</h3><p>Instale os TCRT5000 na frente.</p></div>
+    <!-- CONTEÚDOS -->
+    <div id="materiais" class="tab-content">
+        <h2 class="glow">Materiais Necessários</h2>
+        <ul>
+            <li>Arduino Uno</li>
+            <li>2 motores DC com rodinhas</li>
+            <li>Sensor seguidor de linha (Infravermelho)</li>
+            <li>Driver L298N</li>
+            <li>Bateria 9V ou suporte 6xAA</li>
+            <li>Chassi do carrinho</li>
+            <li>Jumpers</li>
+        </ul>
     </div>
-  </div>
 
-  <!-- ABA 3 -->
-  <div class="content" id="tab-3">
-    <h2 style="text-align:center;font-size:3rem;color:var(--accent)">Fiação do Circuito</h2>
-
-    <div class="grid">
-      <div class="card"><h3>Motores → L298N</h3><p>IN1/IN2 motor esquerdo, IN3/IN4 motor direito.</p></div>
-      <div class="card"><h3>Sensores</h3><p>A0 e A1 do Arduino.</p></div>
-      <div class="card"><h3>Energia</h3><p>5V da L298N alimenta o Arduino.</p></div>
+    <div id="montagem" class="tab-content" style="display:none;">
+        <h2 class="glow">Montagem do Carrinho</h2>
+        <p>Monte o chassi, fixe os motores e instale o suporte de bateria.</p>
+        <p>Prenda o sensor de linha na parte frontal do carrinho.</p>
     </div>
-  </div>
 
-  <!-- ABA 4 -->
-  <div class="content" id="tab-4">
-    <h2 style="text-align:center;font-size:3rem;color:var(--accent)">Código Arduino</h2>
+    <div id="circuito" class="tab-content" style="display:none;">
+        <h2 class="glow">Montagem do Circuito</h2>
+        <p>Conecte o L298N ao Arduino conforme o esquema:</p>
+        <ul>
+            <li>IN1 → D5</li>
+            <li>IN2 → D6</li>
+            <li>IN3 → D9</li>
+            <li>IN4 → D10</li>
+            <li>Sensor Esq → A0</li>
+            <li>Sensor Dir → A1</li>
+        </ul>
+    </div>
 
-    <pre style="background:#0002;padding:2rem;border-radius:1rem;overflow:auto;">
-int s1 = A0;
-int s2 = A1;
+    <div id="codigo" class="tab-content" style="display:none;">
+        <h2 class="glow">Código Arduino</h2>
 
-int e1 = 5;
-int e2 = 6;
+        <pre>
+int esq = A0;
+int dir = A1;
 
-int in1 = 7;
-int in2 = 8;
-int in3 = 9;
-int in4 = 10;
+int IN1 = 5;
+int IN2 = 6;
+int IN3 = 9;
+int IN4 = 10;
 
 void setup() {
-  pinMode(s1,INPUT);
-  pinMode(s2,INPUT);
+  pinMode(esq, INPUT);
+  pinMode(dir, INPUT);
 
-  pinMode(in1,OUTPUT);
-  pinMode(in2,OUTPUT);
-  pinMode(in3,OUTPUT);
-  pinMode(in4,OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
 
-  analogWrite(e1,150);
-  analogWrite(e2,150);
+void frente() {
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void parar() {
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
 }
 
 void loop() {
-  int L = digitalRead(s1);
-  int R = digitalRead(s2);
+  int sE = digitalRead(esq);
+  int sD = digitalRead(dir);
 
-  if(L==0 && R==0){
-    frente();
-  }
-  else if(L==0 && R==1){
-    esquerda();
-  }
-  else if(L==1 && R==0){
-    direita();
-  }
-  else{
-    parar();
-  }
+  if (sE == 0 && sD == 0) frente();
+  else parar();
 }
-
-void frente(){
-  digitalWrite(in1,1);
-  digitalWrite(in2,0);
-  digitalWrite(in3,1);
-  digitalWrite(in4,0);
-}
-
-void esquerda(){
-  digitalWrite(in1,0);
-  digitalWrite(in2,1);
-  digitalWrite(in3,1);
-  digitalWrite(in4,0);
-}
-
-void direita(){
-  digitalWrite(in1,1);
-  digitalWrite(in2,0);
-  digitalWrite(in3,0);
-  digitalWrite(in4,1);
-}
-
-void parar(){
-  digitalWrite(in1,0);
-  digitalWrite(in2,0);
-  digitalWrite(in3,0);
-  digitalWrite(in4,0);
-}
-    </pre>
-  </div>
-
-  <!-- ABA 5 -->
-  <div class="content" id="tab-5">
-    <h2 style="text-align:center;font-size:3rem;color:var(--accent)">Teste Final</h2>
-
-    <div class="grid">
-      <div class="card"><h3>1. Ligue o Carrinho</h3><p>Verifique se os sensores acendem.</p></div>
-      <div class="card"><h3>2. Coloque na Linha</h3><p>Use uma linha preta de 2 cm.</p></div>
-      <div class="card"><h3>3. Ajuste</h3><p>Se sair da linha, altere a velocidade no código.</p></div>
+        </pre>
     </div>
-  </div>
 
-  <!-- ABA 6 -->
-  <div class="content" id="tab-6">
-    <h2 style="text-align:center;font-size:3.5rem;background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;margin-bottom:3rem;">
-      COMPRE TUDO EM 1 CLIQUE
-    </h2>
-
-    <div class="grid">
-      <div class="card produto">
-        <img src="https://http2.mlstatic.com/D_Q_NP_2X_709844-MLA54947897210_042023-R.webp">
-        <h3>Arduino Nano</h3>
-        <p style="color:var(--accent2);font-size:2rem;font-weight:900">R$ 48,90</p>
-        <a class="btn-ml" target="_blank">COMPRAR</a>
-      </div>
+    <div id="teste" class="tab-content" style="display:none;">
+        <h2 class="glow">Testando o Carrinho</h2>
+        <p>Coloque o carrinho sobre uma linha preta em fundo branco e ligue.</p>
+        <p>Ajuste o sensor se necessário.</p>
     </div>
-  </div>
-
 </div>
 
-<footer>Feito por CODE AXIUS — 2025</footer>
-
 <script>
-  const tabs = document.querySelectorAll(".tab-btn");
-  const contents = document.querySelectorAll(".content");
-  const progress = document.getElementById("progress");
+/* ----------- Abas ----------- */
+function openTab(tab) {
+    document.querySelectorAll(".tab-content").forEach(div => div.style.display = "none");
+    document.getElementById(tab).style.display = "block";
 
-  tabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach(t => t.classList.remove("active"));
-      contents.forEach(c => c.classList.remove("active"));
+    document.querySelectorAll(".tab-buttons button")
+        .forEach(btn => btn.classList.remove("active"));
 
-      tab.classList.add("active");
-      document.getElementById(`tab-${i+1}`).classList.add("active");
+    event.target.classList.add("active");
+}
 
-      progress.style.width = `${(i/5) * 100}%`;
-    });
-  });
+/* ----------- Alternância Light/Dark ----------- */
+const toggleBtn = document.getElementById("toggleTheme");
+toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
 
-  progress.style.width = "0%";
+    toggleBtn.textContent = document.body.classList.contains("light")
+        ? "Dark Mode"
+        : "Light Mode";
+});
 </script>
 
 </body>
