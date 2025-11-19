@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrinho Seguidor de Linha — Tutorial Interativo</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#06b6d4;
+      --accent-2:#7c3aed; --font-sans:Inter,system-ui,Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:var(--font-sans);
+      background:linear-gradient(180deg,#071226 0%, #071827 60%);
+      color:#e6eef6; -webkit-font-smoothing:antialiased;
+      padding:28px;display:flex;justify-content:center;
+    }
+    .app{
+      width:100%;max-width:1100px;
+      background:rgba(255,255,255,0.02);
+      border-radius:14px;box-shadow:0 10px 40px rgba(2,6,23,0.7);
+      overflow:hidden;display:grid;grid-template-columns:1fr 360px;gap:22px;padding:20px;
+    }
+    @media(max-width:980px){.app{grid-template-columns:1fr}}
+    .main{padding:6px 12px 18px 12px;}
+    h1{margin:0;font-size:22px;}
+    .subtitle{color:var(--muted);font-size:13px}
+    .tabs{display:flex;gap:6px;margin:12px 0 18px 0;flex-wrap:wrap;}
+    .tab{
+      background:rgba(255,255,255,0.05);border-radius:10px;padding:8px 12px;font-weight:600;
+      cursor:pointer;color:var(--muted);transition:all .18s;
+    }
+    .tab.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021023;}
+    .tab:hover{transform:translateY(-2px)}
+    .card{background:rgba(255,255,255,0.02);border-radius:12px;padding:18px;margin-bottom:14px;}
+    .content-area{min-height:300px}
+    h2{margin:0 0 8px 0}
+    ul,ol{margin-left:18px}
+    pre{background:rgba(0,0,0,0.35);padding:12px;border-radius:8px;overflow:auto;color:#e8fbff;font-size:13px}
+    .controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;}
+    .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;flex:1;margin-right:12px;}
+    .progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021023;padding:8px 12px;border-radius:10px;font-weight:700;border:none;cursor:pointer;}
+    .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
+    aside.side{padding:12px;display:flex;flex-direction:column;gap:12px;}
+    .side .card{padding:12px}
+    .hint{font-size:13px;color:var(--muted)}
+    .row{display:flex;gap:8px;align-items:center}
+    .switch{width:46px;height:26px;background:rgba(255,255,255,0.06);border-radius:20px;position:relative;cursor:pointer;}
+    .knob{width:20px;height:20px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .18s}
+    .switch.on{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+    .switch.on .knob{left:23px}
+    footer{text-align:center;color:var(--muted);font-size:13px;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <main class="main">
+      <header>
+        <h1>Carrinho Seguidor de Linha</h1>
+        <div class="subtitle">Tutorial completo e interativo em HTML puro</div>
+      </header>
+
+      <nav class="tabs">
+        <div class="tab active" data-tab="tab1">1 • Materiais</div>
+        <div class="tab" data-tab="tab2">2 • Montagem</div>
+        <div class="tab" data-tab="tab3">3 • Circuito</div>
+        <div class="tab" data-tab="tab4">4 • Código</div>
+        <div class="tab" data-tab="tab5">5 • Teste</div>
+      </nav>
+
+      <section class="card content-area" id="tab1">
+        <h2>Materiais</h2>
+        <ul>
+          <li>Arduino Uno/Nano</li>
+          <li>Ponte H L298N</li>
+          <li>2 Motores DC + rodas</li>
+          <li>2 sensores de linha IR</li>
+          <li>Chassi com rodinha livre</li>
+          <li>Fios jumper e bateria 6–9V</li>
+        </ul>
+        <div class="controls">
+          <div class="progress"><div class="bar" id="bar"></div></div>
+          <div>
+            <button class="btn" id="next1">Próximo</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card content-area" id="tab2" style="display:none">
+        <h2>Montagem</h2>
+        <ol>
+          <li>Monte o chassi e prenda os motores.</li>
+          <li>Fixe a ponte H e o Arduino.</li>
+          <li>Coloque o sensor na frente do carrinho.</li>
+        </ol>
+        <div class="controls">
+          <button class="btn ghost" id="prev2">Voltar</button>
+          <button class="btn" id="next2">Próximo</button>
+        </div>
+      </section>
+
+      <section class="card content-area" id="tab3" style="display:none">
+        <h2>Circuito</h2>
+        <ul>
+          <li>IN1 → D5</li>
+          <li>IN2 → D6</li>
+          <li>IN3 → D9</li>
+          <li>IN4 → D10</li>
+          <li>Sensores: D2 e D3</li>
+          <li>GND comum entre todos</li>
+        </ul>
+        <div class="controls">
+          <button class="btn ghost" id="prev3">Voltar</button>
+          <button class="btn" id="next3">Próximo</button>
+        </div>
+      </section>
+
+      <section class="card content-area" id="tab4" style="display:none">
+        <h2>Código Arduino</h2>
+        <pre>// Carrinho seguidor de linha simples
+const int sensorEsq = 2;
+const int sensorDir = 3;
+const int in1 = 5;
+const int in2 = 6;
+const int in3 = 9;
+const int in4 = 10;
+
+void setup(){
+  pinMode(sensorEsq, INPUT);
+  pinMode(sensorDir, INPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+}
+
+void loop(){
+  int e = digitalRead(sensorEsq);
+  int d = digitalRead(sensorDir);
+  if(e==1 && d==1) frente();
+  else if(e==0 && d==1) esquerda();
+  else if(e==1 && d==0) direita();
+  else parar();
+}
+
+void frente(){
+  digitalWrite(in1,1); digitalWrite(in2,0);
+  digitalWrite(in3,1); digitalWrite(in4,0);
+}
+void esquerda(){
+  digitalWrite(in1,0); digitalWrite(in2,1);
+  digitalWrite(in3,1); digitalWrite(in4,0);
+}
+void direita(){
+  digitalWrite(in1,1); digitalWrite(in2,0);
+  digitalWrite(in3,0); digitalWrite(in4,1);
+}
+void parar(){
+  digitalWrite(in1,0); digitalWrite(in2,0);
+  digitalWrite(in3,0); digitalWrite(in4,0);
+}</pre>
+        <div class="controls">
+          <button class="btn ghost" id="prev4">Voltar</button>
+          <button class="btn" id="next4">Próximo</button>
+        </div>
+      </section>
+
+      <section class="card content-area" id="tab5" style="display:none">
+        <h2>Teste e Ajustes</h2>
+        <ul>
+          <li>Use pista preta sobre fundo branco.</li>
+          <li>Verifique se os sensores estão a 1cm do solo.</li>
+          <li>Troque 0/1 no código se a lógica estiver invertida.</li>
+        </ul>
+        <p class="hint">Pronto! Seu carrinho está funcionando 🚗</p>
+        <div class="controls">
+          <button class="btn ghost" id="prev5">Voltar</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="side">
+      <div class="card">
+        <strong>Configurações</strong>
+        <div class="row">
+          <span class="hint">Modo escuro</span>
+          <div class="switch on" id="themeSwitch"><div class="knob"></div></div>
+        </div>
+        <div class="row">
+          <span class="hint">Salvar progresso</span>
+          <div class="switch" id="saveSwitch"><div class="knob"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>FAQ</strong>
+        <ul class="hint">
+          <li>Sensor não detecta? Verifique o GND.</li>
+          <li>Motor ao contrário? Inverta fios.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+  <script>
+    const tabs=document.querySelectorAll('.tab');
+    const sections=['tab1','tab2','tab3','tab4','tab5'].map(id=>document.getElementById(id));
+    let index=0;
+    function show(i){
+      sections.forEach((s,j)=>s.style.display=j===i?'':'none');
+      tabs.forEach((t,j)=>t.classList.toggle('active',j===i));
+      index=i;
+      document.querySelector('.bar').style.width=(i/4*100)+'%';
+    }
+    tabs.forEach((t,i)=>t.onclick=()=>show(i));
+    function next(){if(index<4)show(index+1);}
+    function prev(){if(index>0)show(index-1);}
+    document.getElementById('next1').onclick=next;
+    document.getElementById('next2').onclick=next;
+    document.getElementById('next3').onclick=next;
+    document.getElementById('next4').onclick=next;
+    document.getElementById('prev2').onclick=prev;
+    document.getElementById('prev3').onclick=prev;
+    document.getElementById('prev4').onclick=prev;
+    document.getElementById('prev5').onclick=prev;
+
+    const theme=document.getElementById('themeSwitch');
+    theme.onclick=()=>theme.classList.toggle('on');
+    const save=document.getElementById('saveSwitch');
+    save.onclick=()=>{
+      save.classList.toggle('on');
+      if(save.classList.contains('on'))localStorage.setItem('passo',index);
+      else localStorage.removeItem('passo');
+    };
+    if(localStorage.getItem('passo'))show(+localStorage.getItem('passo'));
+  </script>
+</body>
+</html>
