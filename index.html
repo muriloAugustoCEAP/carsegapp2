@@ -181,20 +181,24 @@ body.light pre {
         <h2 class="glow">Montagem do Carrinho</h2>
        <li>Primeiro passo pegue o chassi as rodas e 4 suportes coloque um suporte em cada lado do motor.</li>
           <li>e coloque os parafusos para juntar os suportes com os motores.</li>
-          <li>Segundo passo coloque a roda boba em baixo na ponta do carrinho e prenda a com os parafusos e porcas.</li>
-          <li>Depois disso prenda os sensores na frente do carrinho</li>
+          <li>Segundo passo solde dois fios na ponta da cada motor e númerie os motores para facilitar quando conectar na ponteH.</li>
+          <li>terceiro passo fixe ou cole o arduino e a ponteH</li>
+        <li>quarto passo coloque os dois fios do motor 1 na ponteH depois coloque os dois fios do motor 2 na outra ponta </li>
+        <li>quinto passo fixe os sensores na ponta do carrinho agora pegue um fio conecte no VCC do sensor e no 5V do arduino </li>
+         <li>agora pegue um fio coloque no GND do sensor e no GND do arduino e por ultimo pegue um fio e conecte o na porta </li>
+         <li>analogica do sensor e coloque em uma porta analogica do arduino de sua preferencia </li>
     </div>
 
     <div id="circuito" class="tab-content" style="display:none;">
         <h2 class="glow">Montagem do Circuito</h2>
-        <p>Conecte o L298N ao Arduino conforme o esquema:</p>
+        <p>Exemplo de como conectar as  portas no carrinho segdor de linha:</p>
         <ul>
-            <li>IN1 → D5</li>
-            <li>IN2 → D6</li>
-            <li>IN3 → D9</li>
-            <li>IN4 → D10</li>
-            <li>Sensor Esq → A0</li>
-            <li>Sensor Dir → A1</li>
+            <li>M1 → out1</li>
+            <li>M1 → out2</li>
+            <li>M2 → out3</li>
+            <li>M2 → out4</li>
+            <li>Sensor Esq porta analogica → A0</li>
+            <li>Sensor Dir porta analogica → A1</li>
         </ul>
     </div>
 
@@ -277,4 +281,5 @@ toggleBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
 
